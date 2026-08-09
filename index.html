@@ -47,82 +47,17 @@
     </div>
 
     <section class="hero" aria-labelledby="hero-title">
-      <div class="logo-stage intro intro-1">
-        <div class="logo-aura"></div>
-
-        <svg class="monogram" viewBox="0 0 320 230" role="img" aria-label="CARNORI CN">
-          <defs>
-            <linearGradient id="goldBase" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#5e3508"/>
-              <stop offset=".12" stop-color="#b96f12"/>
-              <stop offset=".25" stop-color="#ffd979"/>
-              <stop offset=".34" stop-color="#fff6cb"/>
-              <stop offset=".47" stop-color="#e4a32b"/>
-              <stop offset=".61" stop-color="#8e500c"/>
-              <stop offset=".74" stop-color="#f2be4e"/>
-              <stop offset=".86" stop-color="#fff0a5"/>
-              <stop offset="1" stop-color="#70400b"/>
-            </linearGradient>
-
-            <linearGradient id="goldEdge" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#fff9dc"/>
-              <stop offset=".28" stop-color="#efb84a"/>
-              <stop offset=".72" stop-color="#9a5c10"/>
-              <stop offset="1" stop-color="#4b2905"/>
-            </linearGradient>
-
-            <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-              <stop offset=".40" stop-color="#fff" stop-opacity="0"/>
-              <stop offset=".50" stop-color="#ffffff" stop-opacity="1"/>
-              <stop offset=".60" stop-color="#fff4bd" stop-opacity="0"/>
-              <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-            </linearGradient>
-
-            <filter id="metalShadow" x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur in="SourceAlpha" stdDeviation="3.6" result="blur"/>
-              <feOffset dy="7" result="offset"/>
-              <feColorMatrix in="offset" values="
-                0 0 0 0 0.02
-                0 0 0 0 0.01
-                0 0 0 0 0
-                0 0 0 .92 0" result="shadow"/>
-              <feMerge>
-                <feMergeNode in="shadow"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-
-            <filter id="softGold" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="8"/>
-            </filter>
-
-            <mask id="logoMask">
-              <rect width="320" height="230" fill="#000"/>
-              <text x="34" y="184" class="svg-c" fill="#fff">C</text>
-              <text x="126" y="190" class="svg-n" fill="#fff">N</text>
-            </mask>
-          </defs>
-
-          <g opacity=".34" filter="url(#softGold)" mask="url(#logoMask)">
-            <rect x="12" y="15" width="290" height="205" fill="#e9a431"/>
-          </g>
-
-          <g filter="url(#metalShadow)">
-            <text x="34" y="184" class="svg-c metal"
-                  fill="url(#goldBase)" stroke="url(#goldEdge)" stroke-width="2">C</text>
-            <text x="126" y="190" class="svg-n metal"
-                  fill="url(#goldBase)" stroke="url(#goldEdge)" stroke-width="1.6">N</text>
-          </g>
-
-          <g mask="url(#logoMask)" class="logo-shine-layer">
-            <rect class="logo-sweep" x="-155" y="-15" width="118" height="270"
-                  fill="url(#shine)" transform="skewX(-13)"/>
-          </g>
-        </svg>
+      <div class="logo-stage intro intro-1" role="img" aria-label="CARNORI CN">
+        <div class="logo-aura" aria-hidden="true"></div>
+        <img class="monogram-img" src="cn-logo.png" alt="" width="590" height="514" decoding="sync" fetchpriority="high">
+        <div class="monogram-light" aria-hidden="true"></div>
+        <div class="monogram-glint" aria-hidden="true"></div>
       </div>
 
-      <div class="brand intro intro-2" aria-label="CARNORI">CARNORI</div>
+      <div class="brand-lockup intro intro-2" aria-label="CARNORI">
+        <img class="brand-wordmark" src="carnori-wordmark.png" alt="CARNORI" width="980" height="126" decoding="sync">
+        <span class="brand-wordmark-light" aria-hidden="true"></span>
+      </div>
       <div class="brand-rule intro intro-3" aria-hidden="true">
         <span></span><b></b><span></span>
       </div>
