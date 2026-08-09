@@ -153,7 +153,7 @@
   window.addEventListener('pointermove', updatePointer, { passive: true });
   window.addEventListener('pointerleave', resetPointer, { passive: true });
   window.addEventListener('blur', resetPointer);
-  window.addEventListener('resize', resizeCanvas, { passive: true });
+  window.addEventListener('resize', () => { resizeCanvas(); scheduleLogoRender(); }, { passive: true });
 
   reduceMotion.addEventListener?.('change', () => {
     resizeCanvas();
@@ -164,8 +164,187 @@
     resizeCanvas();
   });
 
+
+  // ------------------------------------------------------------
+  // CARNORI CN: runtime-rendered static polished 3D metal.
+  // The PNG is used ONLY as the exact silhouette/mask.
+  // No animated shine, no duplicate moving logo layers.
+  // ------------------------------------------------------------
+  const logoSource = document.getElementById('cn-source');
+  const logoCanvas = document.getElementById('cn-3d');
+  let logoRenderTimer = 0;
+
+  function makeTintedMask(maskCanvas, width, height, paint) {
+    const c = document.createElement('canvas');
+    c.width = width; c.height = height;
+    const g = c.getContext('2d');
+    g.drawImage(maskCanvas, 0, 0);
+    g.globalCompositeOperation = 'source-in';
+    if (typeof paint === 'string') {
+      g.fillStyle = paint;
+    } else {
+      g.fillStyle = paint(g, width, height);
+    }
+    g.fillRect(0, 0, width, height);
+    g.globalCompositeOperation = 'source-over';
+    return c;
+  }
+
+  function makeOffsetEdge(maskCanvas, width, height, dx, dy, color) {
+    const c = document.createElement('canvas');
+    c.width = width; c.height = height;
+    const g = c.getContext('2d');
+    g.drawImage(maskCanvas, 0, 0);
+    g.globalCompositeOperation = 'destination-out';
+    g.drawImage(maskCanvas, dx, dy);
+    g.globalCompositeOperation = 'source-in';
+    g.fillStyle = color;
+    g.fillRect(0, 0, width, height);
+    g.globalCompositeOperation = 'source-over';
+    return c;
+  }
+
+  function renderLogo3D() {
+    if (!logoSource || !logoCanvas || !logoSource.complete || !logoSource.naturalWidth) return;
+
+    const stage = logoCanvas.parentElement.getBoundingClientRect();
+    if (!stage.width || !stage.height) return;
+
+    // High-res runtime render so the extruded walls are continuous and smooth.
+    const ldpr = Math.min(window.devicePixelRatio || 1, 2.25);
+    const cssW = stage.width * 1.22;
+    const cssH = stage.height * 1.20;
+    const W = Math.max(420, Math.round(cssW * ldpr));
+    const H = Math.max(360, Math.round(cssH * ldpr));
+
+    logoCanvas.width = W;
+    logoCanvas.height = H;
+    const g = logoCanvas.getContext('2d', {alpha:true});
+    g.setTransform(1,0,0,1,0,0);
+    g.clearRect(0,0,W,H);
+    g.imageSmoothingEnabled = true;
+    g.imageSmoothingQuality = 'high';
+
+    // Front face placement. Extra room on the left/bottom is reserved for depth.
+    const faceW = W * 0.79;
+    const faceH = faceW * (logoSource.naturalHeight / logoSource.naturalWidth);
+    const depth = Math.max(26, Math.round(faceW * 0.060));
+    const totalDX = -depth * 0.66;   // back + left
+    const totalDY =  depth * 0.54;   // back + down
+    const faceX = (W - faceW) * 0.55 - totalDX * 0.20;
+    const faceY = (H - faceH) * 0.43 - totalDY * 0.16;
+
+    // Exact shape mask at target resolution.
+    const mask = document.createElement('canvas');
+    mask.width = Math.round(faceW);
+    mask.height = Math.round(faceH);
+    const mg = mask.getContext('2d');
+    mg.imageSmoothingEnabled = true;
+    mg.imageSmoothingQuality = 'high';
+    mg.drawImage(logoSource, 0, 0, mask.width, mask.height);
+    mg.globalCompositeOperation = 'source-in';
+    mg.fillStyle = '#fff';
+    mg.fillRect(0,0,mask.width,mask.height);
+    mg.globalCompositeOperation = 'source-over';
+
+    // Deep amber/brown side wall with a fixed vertical metal reflection.
+    const side = makeTintedMask(mask, mask.width, mask.height, (sg, sw, sh) => {
+      const gr = sg.createLinearGradient(0, 0, sw, sh * .35);
+      gr.addColorStop(0.00, '#2a1200');
+      gr.addColorStop(0.13, '#6d3503');
+      gr.addColorStop(0.28, '#a85d08');
+      gr.addColorStop(0.43, '#4b2302');
+      gr.addColorStop(0.61, '#8b4706');
+      gr.addColorStop(0.78, '#3b1a00');
+      gr.addColorStop(1.00, '#160900');
+      return gr;
+    });
+
+    // Continuous extrusion: 100 sub-pixel slices, back-left/down as requested.
+    const slices = 100;
+    for (let i = slices; i >= 1; i--) {
+      const t = i / slices;
+      const sx = faceX + totalDX * t;
+      const sy = faceY + totalDY * t;
+      g.globalAlpha = 0.91 + (1-t) * 0.08;
+      g.drawImage(side, sx, sy);
+    }
+    g.globalAlpha = 1;
+
+    // Narrow warm line where the face meets the side wall.
+    const backRim = makeOffsetEdge(mask, mask.width, mask.height,
+      Math.max(2, Math.round(3.0*ldpr)),
+      -Math.max(2, Math.round(2.0*ldpr)),
+      'rgba(96,45,2,.85)');
+    g.drawImage(backRim, faceX + totalDX*.08, faceY + totalDY*.08);
+
+    // Front face: large, fixed mirror reflections rather than a moving stripe.
+    const face = makeTintedMask(mask, mask.width, mask.height, (fg, fw, fh) => {
+      const gr = fg.createLinearGradient(0, fh*.05, fw, fh*.88);
+      gr.addColorStop(0.00, '#8b520a');
+      gr.addColorStop(0.075,'#f3c85f');
+      gr.addColorStop(0.145,'#fff1ad');
+      gr.addColorStop(0.225,'#d8961b');
+      gr.addColorStop(0.335,'#6b3702');
+      gr.addColorStop(0.455,'#d89418');
+      gr.addColorStop(0.565,'#f6cb67');
+      gr.addColorStop(0.655,'#744005');
+      gr.addColorStop(0.755,'#d8951d');
+      gr.addColorStop(0.845,'#fff0a7');
+      gr.addColorStop(0.925,'#c57b0d');
+      gr.addColorStop(1.00, '#704004');
+      return gr;
+    });
+    g.drawImage(face, faceX, faceY);
+
+    // Fixed broad mirror patches clipped to the front face.
+    const reflection = document.createElement('canvas');
+    reflection.width = mask.width; reflection.height = mask.height;
+    const rg = reflection.getContext('2d');
+    rg.drawImage(mask,0,0);
+    rg.globalCompositeOperation='source-in';
+    const refl = rg.createLinearGradient(0,0,mask.width,mask.height*.18);
+    refl.addColorStop(0.00,'rgba(255,255,255,0)');
+    refl.addColorStop(0.12,'rgba(255,247,206,.20)');
+    refl.addColorStop(0.21,'rgba(255,255,241,.48)');
+    refl.addColorStop(0.31,'rgba(255,236,166,.06)');
+    refl.addColorStop(0.46,'rgba(70,31,0,.26)');
+    refl.addColorStop(0.58,'rgba(255,227,133,.16)');
+    refl.addColorStop(0.72,'rgba(255,252,218,.38)');
+    refl.addColorStop(0.82,'rgba(82,36,0,.18)');
+    refl.addColorStop(1,'rgba(255,255,255,0)');
+    rg.fillStyle=refl; rg.fillRect(0,0,mask.width,mask.height);
+    rg.globalCompositeOperation='source-over';
+    g.globalCompositeOperation='screen';
+    g.globalAlpha=.56;
+    g.drawImage(reflection,faceX,faceY);
+    g.globalAlpha=1;
+    g.globalCompositeOperation='source-over';
+
+    // Crisp bevel all around the outer AND inner contours.
+    const bevelPx = Math.max(3, Math.round(3.8 * ldpr));
+    const hi = makeOffsetEdge(mask, mask.width, mask.height, bevelPx, bevelPx, 'rgba(255,247,199,.92)');
+    const low = makeOffsetEdge(mask, mask.width, mask.height, -bevelPx, -bevelPx, 'rgba(72,31,0,.72)');
+    g.globalAlpha=.78; g.drawImage(hi,faceX,faceY);
+    g.globalAlpha=.68; g.drawImage(low,faceX,faceY);
+    g.globalAlpha=1;
+
+    // Hairline polished rim.
+    const rimPx = Math.max(1, Math.round(1.2 * ldpr));
+    const rim = makeOffsetEdge(mask, mask.width, mask.height, rimPx, rimPx, 'rgba(255,249,219,.78)');
+    g.globalAlpha=.68; g.drawImage(rim,faceX,faceY); g.globalAlpha=1;
+  }
+
+  function scheduleLogoRender() {
+    clearTimeout(logoRenderTimer);
+    logoRenderTimer = setTimeout(renderLogo3D, 80);
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
     resizeCanvas();
+
+    if (logoSource.complete) renderLogo3D();
+    else logoSource.addEventListener('load', renderLogo3D, {once:true});
 
     requestAnimationFrame(() => {
       body.classList.add('is-ready');
