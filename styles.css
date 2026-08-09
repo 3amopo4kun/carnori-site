@@ -30,7 +30,7 @@ body{
   overflow:hidden;
   isolation:isolate;
   background:
-    radial-gradient(ellipse at 50% 47%,rgba(158,113,49,.10),transparent 37%),
+    radial-gradient(ellipse at 50% 47%,rgba(137,80,12,.11),transparent 37%),
     linear-gradient(180deg,#040404 0%,#010101 55%,#030201 100%);
 }
 
@@ -46,10 +46,10 @@ body{
 .base-glow{
   inset:-10%;
   background:
-    radial-gradient(ellipse at 50% 40%,rgba(251,227,173,.055),transparent 27%),
-    radial-gradient(ellipse at 50% 78%,rgba(181,137,74,.10),transparent 27%),
-    radial-gradient(circle at 19% 53%,rgba(105,73,36,.06),transparent 24%),
-    radial-gradient(circle at 81% 52%,rgba(105,73,36,.06),transparent 24%);
+    radial-gradient(ellipse at 50% 40%,rgba(255,201,91,.06),transparent 27%),
+    radial-gradient(ellipse at 50% 78%,rgba(218,143,32,.095),transparent 27%),
+    radial-gradient(circle at 19% 53%,rgba(133,78,10,.055),transparent 24%),
+    radial-gradient(circle at 81% 52%,rgba(133,78,10,.055),transparent 24%);
   transform:
     translate3d(calc(var(--px) * -4px),calc(var(--py) * -3px),0)
     scale(1.025);
@@ -63,17 +63,17 @@ body{
 .haze-a{
   inset:10% 4% 28%;
   background:
-    radial-gradient(ellipse at 34% 55%,rgba(181,137,74,.13),transparent 44%),
-    radial-gradient(ellipse at 66% 43%,rgba(217,174,112,.10),transparent 45%);
+    radial-gradient(ellipse at 34% 55%,rgba(176,102,17,.15),transparent 44%),
+    radial-gradient(ellipse at 66% 43%,rgba(220,151,43,.11),transparent 45%);
   transform:translate3d(calc(var(--px) * -9px),calc(var(--py) * -4px),0);
   animation:hazeBreathe 10s ease-in-out infinite alternate;
 }
 .haze-b{
   inset:38% -5% 6%;
   background:
-    radial-gradient(ellipse at 50% 82%,rgba(251,227,173,.095),transparent 38%),
-    radial-gradient(ellipse at 17% 48%,rgba(105,73,36,.10),transparent 36%),
-    radial-gradient(ellipse at 83% 48%,rgba(105,73,36,.10),transparent 36%);
+    radial-gradient(ellipse at 50% 82%,rgba(247,184,63,.12),transparent 38%),
+    radial-gradient(ellipse at 17% 48%,rgba(111,63,7,.12),transparent 36%),
+    radial-gradient(ellipse at 83% 48%,rgba(111,63,7,.12),transparent 36%);
   transform:translate3d(calc(var(--px) * 6px),calc(var(--py) * 4px),0);
   animation:hazeBreathe 13s ease-in-out infinite alternate-reverse;
 }
@@ -92,8 +92,8 @@ body{
   background:conic-gradient(
     from 172deg at 50% 0%,
     transparent 0 43%,
-    rgba(217,174,112,.025) 45%,
-    rgba(251,227,173,.13) 49%,
+    rgba(245,182,61,.02) 45%,
+    rgba(255,221,139,.13) 49%,
     rgba(245,182,61,.025) 53%,
     transparent 57% 100%
   );
@@ -113,7 +113,7 @@ body{
   top:8%;
   opacity:.23;
   background-image:
-    radial-gradient(circle at center,rgba(217,174,112,.52) 0 1px,transparent 1.3px);
+    radial-gradient(circle at center,rgba(244,178,59,.62) 0 1px,transparent 1.3px);
   background-size:10px 10px;
   mask-image:radial-gradient(ellipse at center,#000 0 18%,rgba(0,0,0,.7) 41%,transparent 73%);
   -webkit-mask-image:radial-gradient(ellipse at center,#000 0 18%,rgba(0,0,0,.7) 41%,transparent 73%);
@@ -162,10 +162,10 @@ body{
 .ray-field-back i:nth-child(5){right:-7%;top:36%;transform:rotate(-5deg);animation:rayB 14s ease-in-out -5s infinite alternate}
 .ray-field-back i:nth-child(6){right:-12%;top:70%;transform:rotate(8deg);animation:rayA 12.5s ease-in-out -3s infinite alternate}
 
-.ray-field-mid{opacity:.58;filter:drop-shadow(0 0 8px rgba(181,137,74,.16))}
+.ray-field-mid{opacity:.58;filter:drop-shadow(0 0 8px rgba(224,147,31,.14))}
 .ray-field-mid i{
   width:40vw;
-  background:linear-gradient(90deg,transparent,rgba(251,227,173,.16),rgba(225,187,124,.78),rgba(105,73,36,.16),transparent);
+  background:linear-gradient(90deg,transparent,rgba(255,207,103,.16),rgba(255,193,65,.78),rgba(185,107,12,.12),transparent);
 }
 .ray-field-mid i:nth-child(1){left:-6%;top:18%;transform:rotate(8deg);animation:rayB 8.5s ease-in-out infinite alternate}
 .ray-field-mid i:nth-child(2){left:-3%;top:56%;transform:rotate(-5deg);animation:rayA 11s ease-in-out -2.6s infinite alternate}
@@ -173,11 +173,11 @@ body{
 .ray-field-mid i:nth-child(4){right:-4%;top:55%;transform:rotate(5deg);animation:rayA 10.6s ease-in-out -3.2s infinite alternate}
 .ray-field-mid i:nth-child(5){left:30%;top:91%;width:40vw;opacity:.12;animation:rayC 14s ease-in-out infinite alternate}
 
-.ray-field-front{opacity:.95;filter:drop-shadow(0 0 14px rgba(217,174,112,.31))}
+.ray-field-front{opacity:.95;filter:drop-shadow(0 0 14px rgba(255,183,51,.31))}
 .ray-field-front i{
   width:31vw;
   height:1.45px;
-  background:linear-gradient(90deg,transparent,rgba(255,248,217,.11),rgba(251,227,173,1),rgba(181,137,74,.28),transparent);
+  background:linear-gradient(90deg,transparent,rgba(255,241,189,.10),rgba(255,218,119,1),rgba(245,169,40,.25),transparent);
 }
 .ray-field-front i:nth-child(1){left:-4%;top:41%;transform:rotate(4deg);animation:rayC 7.6s ease-in-out infinite alternate}
 .ray-field-front i:nth-child(2){left:-2%;top:80%;transform:rotate(-7deg);animation:rayA 9.3s ease-in-out -4s infinite alternate}
@@ -276,7 +276,7 @@ body{
   z-index:-2;
   border-radius:50%;
   background:
-    radial-gradient(circle,rgba(251,227,173,.19) 0%,rgba(181,137,74,.085) 28%,rgba(105,73,36,.032) 50%,transparent 70%);
+    radial-gradient(circle,rgba(238,181,78,.16) 0%,rgba(183,112,24,.070) 28%,rgba(92,50,7,.030) 50%,transparent 70%);
   filter:blur(17px);
   animation:logoAura 6.2s ease-in-out infinite;
 }
@@ -294,10 +294,11 @@ body{
   object-fit:contain;
   display:block;
   filter:
-    saturate(1.05)
-    contrast(1.035)
+    saturate(1.02)
+    contrast(1.04)
+    brightness(.95)
     drop-shadow(0 11px 15px rgba(0,0,0,.60))
-    drop-shadow(0 0 12px rgba(217,174,112,.11));
+    drop-shadow(0 0 12px rgba(205,128,24,.10));
   transform:translateZ(0);
 }
 
@@ -335,7 +336,7 @@ body{
   background:#fff9e2;
   box-shadow:
     0 0 7px 2px rgba(255,248,218,.70),
-    0 0 18px 6px rgba(217,174,112,.25);
+    0 0 18px 6px rgba(210,132,26,.22);
   opacity:0;
   animation:logoGlint 7.8s ease-in-out 1.6s infinite;
 }
