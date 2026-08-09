@@ -3,41 +3,153 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#030303">
-  <title>CARNORI — Скоро запуск</title>
-  <meta name="description" content="CARNORI — новый взгляд на обслуживание автомобиля. Скоро запуск.">
+  <meta name="theme-color" content="#020202">
+  <title>CARNORI | Скоро запуск</title>
+  <meta name="description" content="CARNORI. Новый взгляд на обслуживание автомобиля. Скоро запуск.">
   <link rel="canonical" href="https://carnori.ru/">
+
   <meta property="og:type" content="website">
-  <meta property="og:title" content="CARNORI — Скоро запуск">
+  <meta property="og:title" content="CARNORI | Скоро запуск">
   <meta property="og:description" content="Новый взгляд на обслуживание автомобиля.">
   <meta property="og:url" content="https://carnori.ru/">
   <meta property="og:image" content="https://carnori.ru/hero-approved.png">
   <meta name="twitter:card" content="summary_large_image">
+
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="site-shell" aria-label="Стартовая страница CARNORI">
-    <div class="ambient-bg" aria-hidden="true"></div>
-    <div class="ambient-shade" aria-hidden="true"></div>
-    <div class="edge-rays edge-rays-left" aria-hidden="true"></div>
-    <div class="edge-rays edge-rays-right" aria-hidden="true"></div>
-    <div class="grain" aria-hidden="true"></div>
+  <main class="site-shell" aria-label="CARNORI">
+    <canvas id="particles" class="particles" aria-hidden="true"></canvas>
+
+    <div class="scene" aria-hidden="true">
+      <div class="layer base-glow"></div>
+      <div class="layer haze haze-a"></div>
+      <div class="layer haze haze-b"></div>
+      <div class="layer spotlight"></div>
+
+      <div class="layer mesh mesh-left"></div>
+      <div class="layer mesh mesh-right"></div>
+
+      <div class="ray-field ray-field-back">
+        <i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="ray-field ray-field-mid">
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="ray-field ray-field-front">
+        <i></i><i></i><i></i><i></i>
+      </div>
+
+      <div class="mobile-orbit"></div>
+      <div class="floor-reflection"></div>
+      <div class="vignette"></div>
+    </div>
 
     <section class="hero" aria-labelledby="hero-title">
-      <img class="hero-image" src="hero-approved.png"
-           alt="CARNORI. Скоро запуск. Новый взгляд на обслуживание автомобиля."
-           fetchpriority="high" decoding="sync">
-      <div class="logo-aura" aria-hidden="true"></div>
-      <div class="horizon-aura" aria-hidden="true"></div>
-      <div class="light-sweep" aria-hidden="true"></div>
-      <div class="micro-vignette" aria-hidden="true"></div>
-      <div class="seo-copy">
-        <h1 id="hero-title">CARNORI — Скоро запуск</h1>
-        <p>Новый взгляд на обслуживание автомобиля. Driven by precision.</p>
+      <div class="logo-stage intro intro-1">
+        <div class="logo-aura"></div>
+
+        <svg class="monogram" viewBox="0 0 320 230" role="img" aria-label="CARNORI CN">
+          <defs>
+            <linearGradient id="goldBase" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#5e3508"/>
+              <stop offset=".12" stop-color="#b96f12"/>
+              <stop offset=".25" stop-color="#ffd979"/>
+              <stop offset=".34" stop-color="#fff6cb"/>
+              <stop offset=".47" stop-color="#e4a32b"/>
+              <stop offset=".61" stop-color="#8e500c"/>
+              <stop offset=".74" stop-color="#f2be4e"/>
+              <stop offset=".86" stop-color="#fff0a5"/>
+              <stop offset="1" stop-color="#70400b"/>
+            </linearGradient>
+
+            <linearGradient id="goldEdge" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#fff9dc"/>
+              <stop offset=".28" stop-color="#efb84a"/>
+              <stop offset=".72" stop-color="#9a5c10"/>
+              <stop offset="1" stop-color="#4b2905"/>
+            </linearGradient>
+
+            <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+              <stop offset=".40" stop-color="#fff" stop-opacity="0"/>
+              <stop offset=".50" stop-color="#ffffff" stop-opacity="1"/>
+              <stop offset=".60" stop-color="#fff4bd" stop-opacity="0"/>
+              <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+            </linearGradient>
+
+            <filter id="metalShadow" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="3.6" result="blur"/>
+              <feOffset dy="7" result="offset"/>
+              <feColorMatrix in="offset" values="
+                0 0 0 0 0.02
+                0 0 0 0 0.01
+                0 0 0 0 0
+                0 0 0 .92 0" result="shadow"/>
+              <feMerge>
+                <feMergeNode in="shadow"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <filter id="softGold" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="8"/>
+            </filter>
+
+            <mask id="logoMask">
+              <rect width="320" height="230" fill="#000"/>
+              <text x="34" y="184" class="svg-c" fill="#fff">C</text>
+              <text x="126" y="190" class="svg-n" fill="#fff">N</text>
+            </mask>
+          </defs>
+
+          <g opacity=".34" filter="url(#softGold)" mask="url(#logoMask)">
+            <rect x="12" y="15" width="290" height="205" fill="#e9a431"/>
+          </g>
+
+          <g filter="url(#metalShadow)">
+            <text x="34" y="184" class="svg-c metal"
+                  fill="url(#goldBase)" stroke="url(#goldEdge)" stroke-width="2">C</text>
+            <text x="126" y="190" class="svg-n metal"
+                  fill="url(#goldBase)" stroke="url(#goldEdge)" stroke-width="1.6">N</text>
+          </g>
+
+          <g mask="url(#logoMask)" class="logo-shine-layer">
+            <rect class="logo-sweep" x="-155" y="-15" width="118" height="270"
+                  fill="url(#shine)" transform="skewX(-13)"/>
+          </g>
+        </svg>
       </div>
+
+      <div class="brand intro intro-2" aria-label="CARNORI">CARNORI</div>
+      <div class="brand-rule intro intro-3" aria-hidden="true">
+        <span></span><b></b><span></span>
+      </div>
+
+      <div class="copy-block">
+        <h1 id="hero-title" class="intro intro-4">Скоро запуск.</h1>
+        <p class="subtitle intro intro-5">Новый взгляд на обслуживание автомобиля.</p>
+
+        <div class="ornament intro intro-6" aria-hidden="true">
+          <span></span><b></b><span></span>
+        </div>
+
+        <p class="tagline intro intro-7">Driven by precision.</p>
+      </div>
+
+      <div class="horizon-wrap intro intro-8" aria-hidden="true">
+        <div class="horizon-glow"></div>
+        <div class="horizon-line"></div>
+      </div>
+
+      <a class="domain intro intro-9" href="https://carnori.ru/">carnori.ru</a>
     </section>
+
+    <div class="intro-flare" aria-hidden="true"></div>
+    <div class="film-grain" aria-hidden="true"></div>
   </main>
+
   <script src="script.js"></script>
 </body>
 </html>
