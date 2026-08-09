@@ -262,79 +262,30 @@ body{
 .logo-stage{
   position:relative;
   width:clamp(260px,21vw,350px);
-  aspect-ratio:590/514;
+  aspect-ratio:673/592;
   margin-bottom:clamp(-8px,-.4vh,-2px);
   will-change:opacity,filter;
   isolation:isolate;
-}
-
-/* Static 3D extrusion. The CN itself never moves. */
-.logo-stage::before{
-  content:"";
-  position:absolute;
-  inset:1.6% -0.3% -1.6% 0.3%;
-  z-index:-1;
-  pointer-events:none;
-  -webkit-mask:url("cn-logo.png") center/contain no-repeat;
-  mask:url("cn-logo.png") center/contain no-repeat;
-  background:
-    linear-gradient(135deg,
-      #281200 0%,
-      #5b2e03 18%,
-      #a05a09 43%,
-      #603106 67%,
-      #1b0c00 100%);
-  transform:translate3d(7px,9px,0);
-  filter:
-    drop-shadow(1px 2px 0 rgba(187,113,17,.65))
-    drop-shadow(2px 3px 0 rgba(122,64,7,.82))
-    drop-shadow(4px 5px 1px rgba(56,27,2,.90))
-    drop-shadow(0 18px 20px rgba(0,0,0,.58));
-  opacity:.96;
-}
-
-/* Static mirror/specular reflection, not an animation. */
-.logo-stage::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:2;
-  pointer-events:none;
-  -webkit-mask:url("cn-logo.png") center/contain no-repeat;
-  mask:url("cn-logo.png") center/contain no-repeat;
-  background:
-    linear-gradient(111deg,
-      transparent 0 16%,
-      rgba(255,250,220,.06) 21%,
-      rgba(255,252,229,.52) 27%,
-      rgba(255,255,244,.18) 33%,
-      transparent 42% 55%,
-      rgba(255,232,163,.09) 61%,
-      rgba(255,249,218,.31) 68%,
-      transparent 76% 100%),
-    linear-gradient(180deg,
-      rgba(255,247,210,.18) 0%,
-      transparent 26%,
-      rgba(62,26,0,.20) 52%,
-      rgba(255,204,92,.12) 76%,
-      transparent 100%);
-  mix-blend-mode:screen;
-  opacity:.82;
+  overflow:visible;
 }
 
 .logo-aura{
   position:absolute;
-  inset:-18%;
-  z-index:-3;
+  inset:-15%;
+  z-index:-1;
   border-radius:50%;
   background:
-    radial-gradient(circle,rgba(220,145,39,.14) 0%,rgba(156,87,12,.060) 29%,rgba(70,34,3,.028) 51%,transparent 70%);
-  filter:blur(17px);
+    radial-gradient(circle,
+      rgba(221,163,67,.12) 0%,
+      rgba(148,91,19,.052) 31%,
+      rgba(63,32,4,.024) 52%,
+      transparent 72%);
+  filter:blur(18px);
   animation:logoAura 6.2s ease-in-out infinite;
 }
 @keyframes logoAura{
-  0%,100%{opacity:.50;transform:scale(.97)}
-  50%{opacity:.84;transform:scale(1.03)}
+  0%,100%{opacity:.48;transform:scale(.98)}
+  50%{opacity:.76;transform:scale(1.025)}
 }
 
 .monogram-img{
@@ -345,14 +296,8 @@ body{
   height:100%;
   object-fit:contain;
   display:block;
-  filter:
-    saturate(1.08)
-    contrast(1.08)
-    brightness(.93)
-    drop-shadow(1px 0 .4px rgba(255,244,201,.36))
-    drop-shadow(-1px 0 .4px rgba(66,29,1,.72))
-    drop-shadow(0 10px 16px rgba(0,0,0,.55));
-  transform:translateZ(0);
+  transform:none;
+  filter:drop-shadow(0 14px 18px rgba(0,0,0,.52));
 }
 
 .brand-lockup{
@@ -377,35 +322,6 @@ body{
     drop-shadow(0 0 10px rgba(217,174,112,.08));
 }
 
-.brand-wordmark-light{
-  position:absolute;
-  inset:0;
-  z-index:2;
-  pointer-events:none;
-  background:
-    linear-gradient(105deg,
-      transparent 0 35%,
-      rgba(255,255,255,0) 42%,
-      rgba(255,249,222,.16) 47%,
-      rgba(255,255,255,.72) 50%,
-      rgba(255,241,196,.15) 54%,
-      rgba(255,255,255,0) 59%,
-      transparent 100%);
-  -webkit-mask:url("carnori-wordmark.png") center/contain no-repeat;
-  mask:url("carnori-wordmark.png") center/contain no-repeat;
-  mix-blend-mode:screen;
-  opacity:0;
-  transform:translate3d(-90%,0,0);
-  animation:wordmarkSweep 9.4s cubic-bezier(.28,.02,.18,1) 2.0s infinite;
-}
-
-@keyframes wordmarkSweep{
-  0%,16%{opacity:0;transform:translate3d(-90%,0,0)}
-  27%{opacity:.16}
-  42%{opacity:.64}
-  58%{opacity:.10;transform:translate3d(95%,0,0)}
-  100%{opacity:0;transform:translate3d(95%,0,0)}
-}
 
 .brand-rule{
   width:min(330px,46vw);
