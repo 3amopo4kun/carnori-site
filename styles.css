@@ -262,7 +262,7 @@ body{
 .logo-stage{
   position:relative;
   width:clamp(260px,21vw,350px);
-  aspect-ratio:590/514;
+  aspect-ratio:700/539;
   margin-bottom:clamp(-8px,-.4vh,-2px);
   isolation:isolate;
   overflow:visible;
@@ -285,22 +285,15 @@ body{
   opacity:.62;
 }
 
-.cn-source{
+.monogram-image{
   position:absolute;
-  width:1px;
-  height:1px;
-  opacity:0;
-  pointer-events:none;
-}
-
-.monogram-canvas{
-  position:absolute;
-  inset:-8% -10% -12% -12%;
-  width:122%;
-  height:120%;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
   display:block;
   transform:none;
-  filter:drop-shadow(0 16px 20px rgba(0,0,0,.56));
+  filter:drop-shadow(0 16px 22px rgba(0,0,0,.62));
   pointer-events:none;
 }
 
