@@ -382,6 +382,12 @@
   const requestCard = document.getElementById('tester-request-card');
   const maskedPhone = document.getElementById('tester-phone-masked');
   const supportEmail = document.getElementById('tester-support-email');
+  const legalChecks = [
+    document.getElementById('tester-terms'),
+    document.getElementById('tester-privacy'),
+    document.getElementById('tester-consent'),
+    document.getElementById('tester-age')
+  ];
 
   let config = null;
   let csrf = '';
@@ -393,15 +399,37 @@
     if (kind) statusEl.classList.add(kind);
   }
 
+  function phoneLooksValid() {
+    const digits = phoneInput.value.replace(/\D/g, '');
+    return /^(?:7|8)\d{10}$/.test(digits);
+  }
+
+  function canRequestVerification() {
+    const registrationOpen = Boolean(config?.registration_open);
+    const verificationAvailable = Boolean(config?.phone_verification_available ?? config?.sms_available);
+    return registrationOpen
+      && verificationAvailable
+      && phoneLooksValid()
+      && legalChecks.every(item => item?.checked);
+  }
+
+  function syncRequestCodeButton() {
+    if (!requestCodeButton || requestCodeButton.dataset.busy === '1') return;
+    requestCodeButton.disabled = !canRequestVerification();
+  }
+
   function setBusy(button, busy) {
     if (!button) return;
     if (busy) {
       if (!button.dataset.label) button.dataset.label = button.textContent;
+      button.dataset.busy = '1';
       button.disabled = true;
       button.textContent = 'Подождите…';
     } else {
-      button.disabled = false;
+      delete button.dataset.busy;
       if (button.dataset.label) button.textContent = button.dataset.label;
+      if (button === requestCodeButton) syncRequestCodeButton();
+      else button.disabled = false;
     }
   }
 
@@ -504,7 +532,7 @@
       const verificationAvailable = Boolean(config?.phone_verification_available ?? config?.sms_available);
       const verificationMode = config?.verification_mode || 'call';
       requestCodeButton.textContent = verificationMode === 'call' ? 'Получить звонок' : 'Получить код';
-      requestCodeButton.disabled = !(registrationOpen && verificationAvailable);
+      syncRequestCodeButton();
       if (!registrationOpen) {
         setStatus('Регистрация тестировщиков временно закрыта', 'is-error');
       } else if (!verificationAvailable) {
@@ -538,6 +566,11 @@
   }
 
   openButton.addEventListener('click', openPortal);
+  phoneInput.addEventListener('input', syncRequestCodeButton);
+  phoneInput.addEventListener('change', syncRequestCodeButton);
+  legalChecks.forEach(item => item?.addEventListener('change', syncRequestCodeButton));
+  syncRequestCodeButton();
+
   portal.querySelectorAll('[data-tester-close]').forEach(el => el.addEventListener('click', closePortal));
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && portal.classList.contains('is-open')) closePortal();
@@ -546,20 +579,16 @@
   phoneForm.addEventListener('submit', async event => {
     event.preventDefault();
     if (!config) return;
-    const checks = [
-      document.getElementById('tester-terms'),
-      document.getElementById('tester-privacy'),
-      document.getElementById('tester-consent'),
-      document.getElementById('tester-age')
-    ];
-    if (!checks.every(item => item.checked)) {
+    if (!legalChecks.every(item => item?.checked)) {
       setStatus('Примите документы и подтвердите совершеннолетие', 'is-error');
+      syncRequestCodeButton();
       return;
     }
 
     currentPhone = phoneInput.value.trim();
-    if (!currentPhone) {
-      setStatus('Введите номер телефона', 'is-error');
+    if (!phoneLooksValid()) {
+      setStatus('Введите корректный российский номер телефона', 'is-error');
+      syncRequestCodeButton();
       return;
     }
 
@@ -601,7 +630,7 @@
       setStatus(error.message, 'is-error');
     } finally {
       setBusy(requestCodeButton, false);
-      if (!(config?.registration_open && (config?.phone_verification_available ?? config?.sms_available))) requestCodeButton.disabled = true;
+      syncRequestCodeButton();
     }
   });
 
@@ -634,6 +663,7 @@
     phoneForm.hidden = false;
     codeInput.value = '';
     setStatus('Введите номер телефона');
+    syncRequestCodeButton();
     phoneInput.focus();
   });
 
@@ -666,6 +696,6 @@
     codeInput.value = '';
     showAuth();
     setStatus((config?.phone_verification_available ?? config?.sms_available) ? 'Введите номер телефона и примите документы' : 'Кабинет готов. Подтверждение телефона пока подключается');
-    requestCodeButton.disabled = !(config?.registration_open && (config?.phone_verification_available ?? config?.sms_available));
+    syncRequestCodeButton();
   });
 })();
