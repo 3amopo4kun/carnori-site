@@ -377,6 +377,17 @@
   const codeInput = document.getElementById('tester-code');
   const codeNote = document.getElementById('tester-code-note');
   const requestCodeButton = document.getElementById('tester-request-code');
+  const activationForm = document.getElementById('tester-activation-form');
+  const activationInput = document.getElementById('tester-activation-code');
+  const showActivationButton = document.getElementById('tester-show-activation');
+  const altAccess = document.getElementById('tester-alt-access');
+  const applyActivationButton = document.getElementById('tester-apply-activation');
+  const activationLegalChecks = [
+    document.getElementById('tester-activation-terms'),
+    document.getElementById('tester-activation-privacy'),
+    document.getElementById('tester-activation-consent'),
+    document.getElementById('tester-activation-age')
+  ];
   const requestApkButton = document.getElementById('tester-request-apk');
   const downloadApk = document.getElementById('tester-download-apk');
   const requestCard = document.getElementById('tester-request-card');
@@ -409,6 +420,13 @@
 
   function phoneLooksValid() {
     return /^(?:7|8)\d{10}$/.test(normalizedPhoneDigits());
+  }
+
+  function normalizedActivationCode() {
+    const raw = String(activationInput?.value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    const clean = raw.startsWith('CRN') ? raw.slice(3) : raw;
+    if (clean.length !== 12) return String(activationInput?.value || '').trim().toUpperCase();
+    return `CRN-${clean.slice(0,4)}-${clean.slice(4,8)}-${clean.slice(8,12)}`;
   }
 
   function cooldownRemaining() {
@@ -651,6 +669,26 @@
   }
 
   openButton.addEventListener('click', openPortal);
+  showActivationButton?.addEventListener('click', () => {
+    phoneForm.hidden = true;
+    codeForm.hidden = true;
+    if (altAccess) altAccess.hidden = true;
+    activationForm.hidden = false;
+    setStatus('Введите код активации, полученный от администратора CARNORI');
+    setTimeout(() => activationInput?.focus(), 60);
+  });
+  document.getElementById('tester-back-phone')?.addEventListener('click', () => {
+    activationForm.hidden = true;
+    phoneForm.hidden = false;
+    if (altAccess) altAccess.hidden = false;
+    setStatus('Введите номер телефона и примите документы');
+    syncRequestCodeButton();
+    phoneInput.focus();
+  });
+  activationInput?.addEventListener('input', () => {
+    const value = normalizedActivationCode();
+    if (value.startsWith('CRN-') && value.length <= 17) activationInput.value = value;
+  });
   phoneInput.addEventListener('input', syncRequestCodeButton);
   phoneInput.addEventListener('change', syncRequestCodeButton);
   legalChecks.forEach(item => item?.addEventListener('change', syncRequestCodeButton));
@@ -659,6 +697,44 @@
   portal.querySelectorAll('[data-tester-close]').forEach(el => el.addEventListener('click', closePortal));
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && portal.classList.contains('is-open')) closePortal();
+  });
+
+  activationForm?.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!config) return;
+    if (!activationLegalChecks.every(item => item?.checked)) {
+      setStatus('Примите документы и подтвердите совершеннолетие', 'is-error');
+      return;
+    }
+    const activationCode = normalizedActivationCode();
+    if (!/^CRN-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}$/.test(activationCode)) {
+      setStatus('Введите код активации формата CRN-XXXX-XXXX-XXXX', 'is-error');
+      return;
+    }
+    setBusy(applyActivationButton, true);
+    try {
+      const versions = config.documents?.current_versions || {};
+      const payload = await api('/api/v1/testers/manual/activate', {
+        method: 'POST',
+        body: JSON.stringify({
+          activation_code: activationCode,
+          terms_accepted: true,
+          privacy_acknowledged: true,
+          personal_data_consent_accepted: true,
+          age_confirmed: true,
+          terms_version: versions.terms || '',
+          privacy_version: versions.privacy || '',
+          consent_version: versions.consent || '',
+          website: ''
+        })
+      });
+      showAccount(payload);
+      setStatus('Код активации принят. Доступ к APK открыт', 'is-good');
+    } catch (error) {
+      setStatus(error.message || 'Не удалось применить код активации', 'is-error');
+    } finally {
+      setBusy(applyActivationButton, false);
+    }
   });
 
   phoneForm.addEventListener('submit', async event => {
@@ -788,6 +864,10 @@
     csrf = '';
     phoneForm.hidden = false;
     codeForm.hidden = true;
+    activationForm.hidden = true;
+    if (altAccess) altAccess.hidden = false;
+    if (activationInput) activationInput.value = '';
+    activationLegalChecks.forEach(item => { if (item) item.checked = false; });
     codeInput.value = '';
     phoneInput.readOnly = false;
     legalChecks.forEach(item => { if (item) item.disabled = false; });

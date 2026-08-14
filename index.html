@@ -120,6 +120,27 @@
             <button class="tester-primary" id="tester-request-code" type="submit" disabled>Получить звонок</button>
           </form>
 
+          <div class="tester-alt-access" id="tester-alt-access">
+            <span>Если проверочный звонок недоступен</span>
+            <button class="tester-link-button tester-activation-entry" id="tester-show-activation" type="button">Применить код активации</button>
+          </div>
+
+          <form id="tester-activation-form" class="tester-form tester-activation-form" hidden novalidate>
+            <p class="tester-code-note">Введите персональный код, который вы получили от администратора CARNORI. Проверочный звонок в этом режиме не требуется.</p>
+            <label class="tester-label" for="tester-activation-code">Код активации</label>
+            <input class="tester-input tester-activation-code" id="tester-activation-code" name="activation_code" type="text" inputmode="text" autocomplete="off" maxlength="24" placeholder="CRN-XXXX-XXXX-XXXX" required>
+
+            <div class="tester-legal">
+              <label><input id="tester-activation-terms" type="checkbox"> <span>Принимаю <a href="https://api.carnori.ru/legal/terms" target="_blank" rel="noopener">Пользовательское соглашение</a></span></label>
+              <label><input id="tester-activation-privacy" type="checkbox"> <span>Ознакомлен с <a href="https://api.carnori.ru/legal/privacy" target="_blank" rel="noopener">Политикой обработки персональных данных</a></span></label>
+              <label><input id="tester-activation-consent" type="checkbox"> <span>Даю отдельное <a href="https://api.carnori.ru/legal/consent" target="_blank" rel="noopener">Согласие на обработку персональных данных</a></span></label>
+              <label><input id="tester-activation-age" type="checkbox"> <span>Мне исполнилось 18 лет</span></label>
+            </div>
+
+            <button class="tester-primary" id="tester-apply-activation" type="submit">Применить код активации</button>
+            <button class="tester-link-button" id="tester-back-phone" type="button">Вернуться к подтверждению телефона</button>
+          </form>
+
           <form id="tester-code-form" class="tester-form tester-code-form" hidden novalidate>
             <p class="tester-code-note" id="tester-code-note"></p>
             <label class="tester-label" for="tester-code">Последние 4 цифры номера звонящего</label>
