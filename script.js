@@ -392,6 +392,10 @@
   let config = null;
   let csrf = '';
   let currentPhone = '';
+  let resendUntil = 0;
+  let resendTimer = null;
+  let hasRequestedVerification = false;
+  const COOLDOWN_STORAGE_KEY = 'carnori_tester_call_cooldown_v2';
 
   function setStatus(message, kind = '') {
     statusEl.textContent = message;
@@ -399,9 +403,60 @@
     if (kind) statusEl.classList.add(kind);
   }
 
+  function normalizedPhoneDigits() {
+    return phoneInput.value.replace(/\D/g, '');
+  }
+
   function phoneLooksValid() {
-    const digits = phoneInput.value.replace(/\D/g, '');
-    return /^(?:7|8)\d{10}$/.test(digits);
+    return /^(?:7|8)\d{10}$/.test(normalizedPhoneDigits());
+  }
+
+  function cooldownRemaining() {
+    return Math.max(0, Math.ceil((resendUntil - Date.now()) / 1000));
+  }
+
+  function formatCooldown(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const rest = seconds % 60;
+    return `${minutes}:${String(rest).padStart(2, '0')}`;
+  }
+
+  function saveCooldown() {
+    try {
+      localStorage.setItem(COOLDOWN_STORAGE_KEY, JSON.stringify({
+        until: resendUntil,
+        requested: hasRequestedVerification,
+        savedAt: Date.now()
+      }));
+    } catch (_) {}
+  }
+
+  function restoreCooldown() {
+    try {
+      const raw = localStorage.getItem(COOLDOWN_STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (!saved || typeof saved.until !== 'number') return;
+      if (Date.now() - Number(saved.savedAt || 0) > 86400000) {
+        localStorage.removeItem(COOLDOWN_STORAGE_KEY);
+        return;
+      }
+      resendUntil = Number(saved.until || 0);
+      hasRequestedVerification = Boolean(saved.requested);
+    } catch (_) {}
+  }
+
+  function requestButtonLabel() {
+    const remaining = cooldownRemaining();
+    const mode = config?.verification_mode || 'call';
+    if (remaining > 0) {
+      const action = mode === 'call' ? 'Отправить повторный звонок' : 'Отправить код повторно';
+      return `${action} через ${formatCooldown(remaining)}`;
+    }
+    if (hasRequestedVerification) {
+      return mode === 'call' ? 'Отправить повторный звонок' : 'Отправить код повторно';
+    }
+    return mode === 'call' ? 'Получить звонок' : 'Получить код';
   }
 
   function canRequestVerification() {
@@ -410,13 +465,43 @@
     return registrationOpen
       && verificationAvailable
       && phoneLooksValid()
-      && legalChecks.every(item => item?.checked);
+      && legalChecks.every(item => item?.checked)
+      && cooldownRemaining() === 0;
   }
 
   function syncRequestCodeButton() {
     if (!requestCodeButton || requestCodeButton.dataset.busy === '1') return;
+    requestCodeButton.textContent = requestButtonLabel();
     requestCodeButton.disabled = !canRequestVerification();
   }
+
+  function stopCooldownTicker() {
+    if (resendTimer) {
+      clearInterval(resendTimer);
+      resendTimer = null;
+    }
+  }
+
+  function startCooldown(seconds, requested = true) {
+    const safeSeconds = Math.max(0, Number(seconds) || 0);
+    if (requested) hasRequestedVerification = true;
+    resendUntil = Date.now() + safeSeconds * 1000;
+    saveCooldown();
+    stopCooldownTicker();
+    syncRequestCodeButton();
+    if (safeSeconds <= 0) return;
+    resendTimer = setInterval(() => {
+      if (cooldownRemaining() <= 0) {
+        resendUntil = 0;
+        saveCooldown();
+        stopCooldownTicker();
+      }
+      syncRequestCodeButton();
+    }, 250);
+  }
+
+  restoreCooldown();
+  if (cooldownRemaining() > 0) startCooldown(cooldownRemaining(), hasRequestedVerification);
 
   function setBusy(button, busy) {
     if (!button) return;
@@ -452,8 +537,9 @@
     }
     if (!response.ok) {
       const detail = payload && payload.detail ? payload.detail : `Ошибка сервера ${response.status}`;
-      const error = new Error(detail);
+      const error = new Error(typeof detail === 'string' ? detail : 'Ошибка сервера');
       error.status = response.status;
+      error.retryAfter = Number(response.headers.get('Retry-After') || 0);
       throw error;
     }
     return payload;
@@ -531,7 +617,6 @@
       const registrationOpen = Boolean(config?.registration_open);
       const verificationAvailable = Boolean(config?.phone_verification_available ?? config?.sms_available);
       const verificationMode = config?.verification_mode || 'call';
-      requestCodeButton.textContent = verificationMode === 'call' ? 'Получить звонок' : 'Получить код';
       syncRequestCodeButton();
       if (!registrationOpen) {
         setStatus('Регистрация тестировщиков временно закрыта', 'is-error');
@@ -609,8 +694,12 @@
           website: ''
         })
       });
-      phoneForm.hidden = true;
+      phoneForm.hidden = false;
       codeForm.hidden = false;
+      phoneInput.readOnly = true;
+      legalChecks.forEach(item => { if (item) item.disabled = true; });
+      hasRequestedVerification = true;
+      startCooldown(Number(result?.resend_after_seconds || 60), true);
       codeNote.textContent = `Код отправлен на ${result.phone_masked || 'указанный номер'}. Он действует ограниченное время.`;
       const mode = result?.verification_mode || config?.verification_mode || 'call';
       if (mode === 'call') {
@@ -627,6 +716,9 @@
       }
       setTimeout(() => codeInput.focus(), 80);
     } catch (error) {
+      if (error.status === 429 && error.retryAfter > 0) {
+        startCooldown(error.retryAfter, true);
+      }
       setStatus(error.message, 'is-error');
     } finally {
       setBusy(requestCodeButton, false);
@@ -662,7 +754,10 @@
     codeForm.hidden = true;
     phoneForm.hidden = false;
     codeInput.value = '';
-    setStatus('Введите номер телефона');
+    currentPhone = '';
+    phoneInput.readOnly = false;
+    legalChecks.forEach(item => { if (item) item.disabled = false; });
+    setStatus(cooldownRemaining() > 0 ? 'Номер можно изменить. Повторный звонок станет доступен после таймера' : 'Введите номер телефона');
     syncRequestCodeButton();
     phoneInput.focus();
   });
@@ -694,6 +789,8 @@
     phoneForm.hidden = false;
     codeForm.hidden = true;
     codeInput.value = '';
+    phoneInput.readOnly = false;
+    legalChecks.forEach(item => { if (item) item.disabled = false; });
     showAuth();
     setStatus((config?.phone_verification_available ?? config?.sms_available) ? 'Введите номер телефона и примите документы' : 'Кабинет готов. Подтверждение телефона пока подключается');
     syncRequestCodeButton();

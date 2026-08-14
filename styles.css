@@ -903,3 +903,6 @@ body.tester-open{overflow:hidden}
   .tester-entry{opacity:1!important;transform:none!important}
   .tester-portal,.tester-panel{transition:none!important}
 }
+
+/* Explicit hidden handling for tester state views. */
+.tester-portal [hidden]{display:none!important}
