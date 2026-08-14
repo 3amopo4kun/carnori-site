@@ -87,69 +87,6 @@
       <a class="domain intro intro-9" href="https://carnori.ru/">carnori.ru</a>
     </section>
 
-    <button class="tester-entry" id="tester-entry" type="button" aria-haspopup="dialog" aria-controls="tester-portal">
-      <span class="tester-entry-dot" aria-hidden="true"></span>
-      ТЕСТ
-    </button>
-
-    <section class="tester-portal" id="tester-portal" aria-hidden="true">
-      <div class="tester-backdrop" data-tester-close></div>
-      <div class="tester-panel" role="dialog" aria-modal="true" aria-labelledby="tester-title">
-        <button class="tester-close" type="button" data-tester-close aria-label="Закрыть">×</button>
-
-        <div class="tester-brand">
-          <span class="tester-eyebrow">CARNORI EARLY ACCESS</span>
-          <h2 id="tester-title">Закрытое тестирование</h2>
-          <p>Доступ к APK выдаётся только после подтверждения заявки</p>
-        </div>
-
-        <div class="tester-status" id="tester-status" role="status" aria-live="polite">Подключение к CARNORI…</div>
-
-        <div class="tester-view" id="tester-auth-view" hidden>
-          <form id="tester-phone-form" class="tester-form" novalidate>
-            <label class="tester-label" for="tester-phone">Номер телефона</label>
-            <input class="tester-input" id="tester-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 999 123-45-67" maxlength="24" required>
-
-            <div class="tester-legal">
-              <label><input id="tester-terms" type="checkbox"> <span>Принимаю <a href="https://api.carnori.ru/legal/terms" target="_blank" rel="noopener">Пользовательское соглашение</a></span></label>
-              <label><input id="tester-privacy" type="checkbox"> <span>Ознакомлен с <a href="https://api.carnori.ru/legal/privacy" target="_blank" rel="noopener">Политикой обработки персональных данных</a></span></label>
-              <label><input id="tester-consent" type="checkbox"> <span>Даю отдельное <a href="https://api.carnori.ru/legal/consent" target="_blank" rel="noopener">Согласие на обработку персональных данных</a></span></label>
-              <label><input id="tester-age" type="checkbox"> <span>Мне исполнилось 18 лет</span></label>
-            </div>
-
-            <button class="tester-primary" id="tester-request-code" type="submit">Получить код</button>
-          </form>
-
-          <form id="tester-code-form" class="tester-form tester-code-form" hidden novalidate>
-            <p class="tester-code-note" id="tester-code-note"></p>
-            <label class="tester-label" for="tester-code">Код из SMS</label>
-            <input class="tester-input tester-code-input" id="tester-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required>
-            <button class="tester-primary" type="submit">Подтвердить номер</button>
-            <button class="tester-link-button" id="tester-change-phone" type="button">Изменить номер</button>
-          </form>
-        </div>
-
-        <div class="tester-view" id="tester-account-view" hidden>
-          <div class="tester-account-head">
-            <div>
-              <span class="tester-caption">ТЕСТИРОВЩИК</span>
-              <strong id="tester-phone-masked">—</strong>
-            </div>
-            <button class="tester-link-button" id="tester-logout" type="button">Выйти</button>
-          </div>
-
-          <div class="tester-request-card" id="tester-request-card"></div>
-          <button class="tester-primary" id="tester-request-apk" type="button" hidden>Запросить доступ к APK</button>
-          <a class="tester-primary tester-download" id="tester-download-apk" href="https://api.carnori.ru/api/v1/testers/apk/download" hidden>Скачать CARNORI APK</a>
-        </div>
-
-        <div class="tester-footer">
-          <span>Поддержка</span>
-          <a id="tester-support-email" href="mailto:carnori@mail.ru">carnori@mail.ru</a>
-        </div>
-      </div>
-    </section>
-
     <div class="intro-flare" aria-hidden="true"></div>
     <div class="film-grain" aria-hidden="true"></div>
   </main>
