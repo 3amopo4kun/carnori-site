@@ -343,12 +343,16 @@
   window.addEventListener('DOMContentLoaded', () => {
     resizeCanvas();
 
-    if (logoSource.complete) renderLogo3D();
-    else logoSource.addEventListener('load', renderLogo3D, {once:true});
-
+    // Always reveal the page even if the optional legacy 3D-logo
+    // elements are not present in the current HTML.
     requestAnimationFrame(() => {
       body.classList.add('is-ready');
     });
+
+    if (logoSource && logoCanvas) {
+      if (logoSource.complete) renderLogo3D();
+      else logoSource.addEventListener('load', renderLogo3D, {once:true});
+    }
 
     start();
   });
