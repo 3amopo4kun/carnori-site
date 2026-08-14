@@ -501,12 +501,14 @@
 
       showAuth();
       const registrationOpen = Boolean(config?.registration_open);
-      const smsAvailable = Boolean(config?.sms_available);
-      requestCodeButton.disabled = !(registrationOpen && smsAvailable);
+      const verificationAvailable = Boolean(config?.phone_verification_available ?? config?.sms_available);
+      const verificationMode = config?.verification_mode || 'call';
+      requestCodeButton.textContent = verificationMode === 'call' ? 'Получить звонок' : 'Получить код';
+      requestCodeButton.disabled = !(registrationOpen && verificationAvailable);
       if (!registrationOpen) {
         setStatus('Регистрация тестировщиков временно закрыта', 'is-error');
-      } else if (!smsAvailable) {
-        setStatus('Кабинет готов. Подтверждение по SMS пока подключается');
+      } else if (!verificationAvailable) {
+        setStatus('Кабинет готов. Подтверждение телефона пока подключается');
       } else {
         setStatus('Введите номер телефона и примите документы');
       }
@@ -581,21 +583,34 @@
       phoneForm.hidden = true;
       codeForm.hidden = false;
       codeNote.textContent = `Код отправлен на ${result.phone_masked || 'указанный номер'}. Он действует ограниченное время.`;
-      setStatus('Введите шестизначный код из SMS', 'is-good');
+      const mode = result?.verification_mode || config?.verification_mode || 'call';
+      if (mode === 'call') {
+        codeInput.maxLength = 4;
+        codeInput.pattern = '[0-9]{4}';
+        codeInput.placeholder = '0000';
+        codeNote.textContent = `На ${result.phone_masked || currentPhone} поступит звонок. Отвечать не нужно. Введите последние 4 цифры номера, с которого звонят.`;
+        setStatus('Ждём звонок. Введите последние 4 цифры номера звонящего', 'is-good');
+      } else {
+        codeInput.maxLength = 6;
+        codeInput.pattern = '[0-9]{6}';
+        codeInput.placeholder = '000000';
+        setStatus('Введите шестизначный код из SMS', 'is-good');
+      }
       setTimeout(() => codeInput.focus(), 80);
     } catch (error) {
       setStatus(error.message, 'is-error');
     } finally {
       setBusy(requestCodeButton, false);
-      if (!(config?.registration_open && config?.sms_available)) requestCodeButton.disabled = true;
+      if (!(config?.registration_open && (config?.phone_verification_available ?? config?.sms_available))) requestCodeButton.disabled = true;
     }
   });
 
   codeForm.addEventListener('submit', async event => {
     event.preventDefault();
     const code = codeInput.value.replace(/\D/g, '');
-    if (code.length !== 6) {
-      setStatus('Введите 6 цифр из SMS', 'is-error');
+    const expectedLength = (config?.verification_mode || 'call') === 'call' ? 4 : 6;
+    if (code.length !== expectedLength) {
+      setStatus(expectedLength === 4 ? 'Введите последние 4 цифры номера звонящего' : 'Введите 6 цифр из SMS', 'is-error');
       return;
     }
     const button = codeForm.querySelector('.tester-primary');
@@ -650,7 +665,7 @@
     codeForm.hidden = true;
     codeInput.value = '';
     showAuth();
-    setStatus(config?.sms_available ? 'Введите номер телефона и примите документы' : 'Кабинет готов. Подтверждение по SMS пока подключается');
-    requestCodeButton.disabled = !(config?.registration_open && config?.sms_available);
+    setStatus((config?.phone_verification_available ?? config?.sms_available) ? 'Введите номер телефона и примите документы' : 'Кабинет готов. Подтверждение телефона пока подключается');
+    requestCodeButton.disabled = !(config?.registration_open && (config?.phone_verification_available ?? config?.sms_available));
   });
 })();

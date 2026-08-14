@@ -117,13 +117,13 @@
               <label><input id="tester-age" type="checkbox"> <span>Мне исполнилось 18 лет</span></label>
             </div>
 
-            <button class="tester-primary" id="tester-request-code" type="submit">Получить код</button>
+            <button class="tester-primary" id="tester-request-code" type="submit">Получить звонок</button>
           </form>
 
           <form id="tester-code-form" class="tester-form tester-code-form" hidden novalidate>
             <p class="tester-code-note" id="tester-code-note"></p>
-            <label class="tester-label" for="tester-code">Код из SMS</label>
-            <input class="tester-input tester-code-input" id="tester-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required>
+            <label class="tester-label" for="tester-code">Последние 4 цифры номера звонящего</label>
+            <input class="tester-input tester-code-input" id="tester-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4}" maxlength="4" placeholder="0000" required>
             <button class="tester-primary" type="submit">Подтвердить номер</button>
             <button class="tester-link-button" id="tester-change-phone" type="button">Изменить номер</button>
           </form>
