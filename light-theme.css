@@ -1,0 +1,615 @@
+/* CARNORI approved light presentation layer.
+   Existing markup and tester logic remain untouched; this file only changes appearance. */
+
+:root{
+  --bg:#f5efe4;
+  --paper:#fffdf8;
+  --paper-soft:#f8f2e8;
+  --ink:#171714;
+  --ink-soft:#5f5a52;
+  --gold:#ae7b2d;
+  --gold-deep:#76501b;
+  --gold-pale:#e6c78f;
+  --line:rgba(118,80,27,.20);
+}
+
+html{
+  color-scheme:light;
+  background:#f5efe4;
+}
+
+body{
+  color:var(--ink);
+  background:#f5efe4;
+}
+
+.site-shell{
+  background-color:#f5efe4;
+  background-image:
+    linear-gradient(90deg,rgba(255,253,248,.60) 0%,rgba(255,253,248,.24) 46%,rgba(255,253,248,.02) 74%),
+    url("carnori-light-master-background.png");
+  background-repeat:no-repeat;
+  background-position:center,right center;
+  background-size:cover,auto 132%;
+}
+
+.scene{
+  z-index:1;
+  background:transparent;
+}
+
+.scene::before{
+  content:"";
+  position:absolute;
+  right:-11vw;
+  top:7%;
+  width:min(51vw,790px);
+  aspect-ratio:1;
+  border:1px solid rgba(183,127,44,.15);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 36px rgba(255,255,255,.10),
+    0 0 110px rgba(213,156,66,.10);
+  transform:translate3d(calc(var(--px) * 9px),calc(var(--py) * 6px),0);
+  transition:transform .5s ease-out;
+}
+
+.scene::after{
+  content:"";
+  position:absolute;
+  left:clamp(30px,5vw,82px);
+  top:50%;
+  width:1px;
+  height:46vh;
+  background:linear-gradient(180deg,transparent,rgba(118,80,27,.22),transparent);
+  transform:translateY(-50%);
+}
+
+.base-glow,.haze,.spotlight,.mesh,.ray-field,.floor-reflection,.mobile-orbit,.vignette{
+  display:none;
+}
+
+.particles{
+  z-index:2;
+  opacity:.20;
+  mix-blend-mode:multiply;
+}
+
+.hero{
+  width:min(62vw,860px);
+  align-items:flex-start;
+  justify-content:center;
+  padding:
+    max(92px,env(safe-area-inset-top))
+    clamp(28px,4vw,64px)
+    max(82px,env(safe-area-inset-bottom));
+  margin-left:clamp(12px,2.4vw,46px);
+  text-align:center;
+  align-items:center;
+}
+
+.hero::before{
+  content:"CARNORI  /  DIGITAL CAR CARE";
+  position:absolute;
+  top:clamp(95px,12vh,140px);
+  left:50%;
+  width:100%;
+  transform:translateX(-50%);
+  text-align:center;
+  color:rgba(91,65,28,.62);
+  font:600 10px/1.2 "Segoe UI",sans-serif;
+  letter-spacing:.29em;
+}
+
+.logo-stage{
+  width:clamp(210px,17vw,270px);
+  aspect-ratio:1;
+  margin:clamp(25px,3vh,42px) auto -8px;
+}
+
+.logo-aura{
+  inset:-28%;
+  background:radial-gradient(circle,rgba(226,181,100,.20),rgba(255,251,242,.12) 42%,transparent 70%);
+  filter:blur(18px);
+  opacity:.74;
+}
+
+.monogram-image{
+  transform:scale(1.34);
+  filter:none;
+}
+
+.brand-lockup{
+  width:clamp(340px,31vw,520px);
+  height:clamp(48px,5vw,70px);
+  aspect-ratio:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto;
+}
+
+.brand-wordmark-text{
+  display:block;
+  color:#4a301a;
+  font-family:"Segoe UI Variable Display","Segoe UI",Arial,sans-serif;
+  font-size:clamp(34px,3.7vw,56px);
+  font-weight:900;
+  line-height:1;
+  letter-spacing:.15em;
+  padding-left:.15em;
+  text-transform:uppercase;
+}
+
+.brand-rule{
+  width:min(310px,42vw);
+  margin:clamp(18px,2.2vh,25px) auto 0;
+}
+
+.brand-rule span{
+  background:linear-gradient(90deg,rgba(118,80,27,.04),rgba(174,123,45,.72));
+}
+
+.brand-rule span:last-child{
+  background:linear-gradient(90deg,rgba(174,123,45,.72),rgba(118,80,27,.04));
+}
+
+.brand-rule b{
+  background:#b68332;
+  box-shadow:0 0 0 5px rgba(182,131,50,.08),0 0 15px rgba(182,131,50,.20);
+}
+
+.copy-block{
+  width:100%;
+  margin-top:clamp(24px,3vh,36px);
+}
+
+h1{
+  color:var(--ink);
+  font-weight:300;
+  font-size:clamp(54px,5.5vw,88px);
+  letter-spacing:-.035em;
+  text-shadow:none;
+}
+
+.subtitle{
+  max-width:620px;
+  margin-top:clamp(16px,2vh,23px);
+  margin-left:auto;
+  margin-right:auto;
+  color:var(--ink-soft);
+  font-size:clamp(15px,1.35vw,21px);
+  font-weight:400;
+  letter-spacing:.095em;
+}
+
+.ornament{
+  width:min(225px,34vw);
+  margin:clamp(24px,3vh,34px) auto clamp(20px,2.6vh,29px);
+}
+
+.ornament span{
+  background:linear-gradient(90deg,rgba(118,80,27,.03),rgba(174,123,45,.72));
+}
+
+.ornament span:last-child{
+  background:linear-gradient(90deg,rgba(174,123,45,.72),rgba(118,80,27,.03));
+}
+
+.ornament b{
+  background:linear-gradient(135deg,#8b6024,#d8af6a 45%,#fff3d1 55%,#9a6926);
+  box-shadow:0 0 0 6px rgba(174,123,45,.06),0 4px 14px rgba(103,69,22,.11);
+}
+
+.tagline{
+  color:var(--gold-deep);
+  text-shadow:none;
+}
+
+.horizon-wrap{
+  left:10%;
+  right:10%;
+  bottom:clamp(55px,7.4vh,76px);
+  width:auto;
+  height:45px;
+  transform:none;
+}
+
+.horizon-glow{
+  display:none;
+}
+
+.horizon-line{
+  top:0;
+  height:45px;
+}
+
+.horizon-line::before{
+  display:none;
+}
+
+.horizon-line::after{
+  left:0;
+  right:0;
+  top:22px;
+  background:linear-gradient(90deg,rgba(118,80,27,.30),rgba(174,123,45,.08) 48%,transparent 82%);
+  box-shadow:none;
+}
+
+.domain{
+  left:auto;
+  right:clamp(34px,5vw,82px);
+  bottom:clamp(25px,3.1vh,34px);
+  transform:none;
+  padding:0;
+  color:rgba(91,65,28,.72);
+  font-size:12px;
+  letter-spacing:.30em;
+}
+
+.domain:hover{
+  color:var(--gold-deep);
+  text-shadow:none;
+}
+
+.film-grain{
+  opacity:.065;
+  mix-blend-mode:multiply;
+  background-image:
+    radial-gradient(circle at 20% 15%,rgba(104,73,29,.28) 0 .4px,transparent .7px),
+    radial-gradient(circle at 70% 40%,rgba(104,73,29,.20) 0 .4px,transparent .7px),
+    radial-gradient(circle at 40% 80%,rgba(104,73,29,.16) 0 .4px,transparent .7px);
+}
+
+.intro-flare{
+  background:#fff9e8;
+  box-shadow:0 0 16px 5px rgba(255,248,221,.8),0 0 48px 18px rgba(205,145,54,.15);
+}
+
+.electricians-link{
+  position:fixed;
+  z-index:40;
+  top:max(22px,env(safe-area-inset-top));
+  left:max(24px,env(safe-area-inset-left));
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  min-height:42px;
+  padding:0 16px 0 8px;
+  border:1px solid rgba(111,78,30,.22);
+  border-radius:999px;
+  color:#332b21;
+  background:rgba(255,253,248,.68);
+  box-shadow:0 10px 34px rgba(105,75,33,.08),inset 0 1px 0 rgba(255,255,255,.72);
+  backdrop-filter:blur(18px) saturate(1.15);
+  -webkit-backdrop-filter:blur(18px) saturate(1.15);
+  font:650 12px/1 "Segoe UI",sans-serif;
+  letter-spacing:.10em;
+  text-decoration:none;
+  text-transform:uppercase;
+  opacity:0;
+  transform:translateY(-8px);
+  transition:color .22s ease,border-color .22s ease,background .22s ease,box-shadow .22s ease,transform .22s ease;
+}
+
+body.is-ready .electricians-link{
+  animation:testerEntryIn .7s cubic-bezier(.18,.72,.22,1) .35s forwards;
+}
+
+.electricians-link:hover{
+  color:#171714;
+  border-color:rgba(144,96,27,.42);
+  background:rgba(255,253,248,.92);
+  box-shadow:0 13px 38px rgba(105,75,33,.13),inset 0 1px 0 #fff;
+  transform:translateY(-1px);
+}
+
+.electricians-link-index{
+  display:grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  color:#fffaf0;
+  background:#292821;
+  font-size:9px;
+  letter-spacing:.08em;
+}
+
+.electricians-link-arrow{
+  color:var(--gold-deep);
+  font-size:15px;
+  line-height:1;
+}
+
+.tester-entry{
+  border-color:rgba(111,78,30,.24);
+  color:#4e3b23;
+  background:rgba(255,253,248,.68);
+  box-shadow:0 10px 34px rgba(105,75,33,.08),inset 0 1px 0 rgba(255,255,255,.72);
+}
+
+.tester-entry:hover{
+  color:#171714;
+  border-color:rgba(144,96,27,.42);
+  background:rgba(255,253,248,.94);
+  box-shadow:0 13px 38px rgba(105,75,33,.13),inset 0 1px 0 #fff;
+}
+
+.tester-entry-dot{
+  background:#ad7a2f;
+  box-shadow:0 0 0 4px rgba(173,122,47,.08),0 0 14px rgba(173,122,47,.24);
+}
+
+.tester-backdrop{
+  background:rgba(78,64,43,.30);
+  backdrop-filter:blur(18px) saturate(.9);
+  -webkit-backdrop-filter:blur(18px) saturate(.9);
+}
+
+.tester-backdrop::after{
+  background:radial-gradient(circle at 50% 22%,rgba(255,247,229,.55),transparent 37%);
+}
+
+.tester-panel{
+  border-color:rgba(139,96,32,.24);
+  color:var(--ink);
+  background:
+    linear-gradient(145deg,rgba(255,253,248,.99),rgba(246,239,227,.99)),
+    #fffdf8;
+  box-shadow:0 40px 120px rgba(64,47,25,.25),inset 0 1px 0 rgba(255,255,255,.88);
+  scrollbar-color:#c49a59 transparent;
+}
+
+.tester-panel::before{
+  background:linear-gradient(90deg,transparent,#b88639 35%,#e6c68a 50%,#b88639 65%,transparent);
+}
+
+.tester-close{
+  border-color:rgba(139,96,32,.22);
+  color:#7f6c50;
+  background:rgba(255,255,255,.36);
+}
+
+.tester-close:hover{
+  color:#201d18;
+  border-color:rgba(139,96,32,.42);
+  background:rgba(182,130,50,.08);
+}
+
+.tester-eyebrow,.tester-caption{color:#8b6124}
+.tester-brand h2{color:#201d18}
+.tester-brand p{color:#746c61}
+
+.tester-status{
+  border-color:rgba(79,63,41,.10);
+  color:#746c61;
+  background:rgba(130,102,61,.045);
+}
+
+.tester-status.is-error{color:#a34d4d;border-color:rgba(170,69,69,.20);background:rgba(170,69,69,.055)}
+.tester-status.is-good{color:#4f7645;border-color:rgba(78,125,64,.20);background:rgba(78,125,64,.055)}
+.tester-label{color:#685e50}
+
+.tester-input{
+  border-color:rgba(139,96,32,.22);
+  color:#201d18;
+  background:rgba(255,255,255,.72);
+}
+
+.tester-input:focus{
+  border-color:rgba(165,112,34,.56);
+  box-shadow:0 0 0 3px rgba(165,112,34,.08);
+  background:#fff;
+}
+
+.tester-input::placeholder{color:#aaa093}
+
+.tester-legal{
+  border-color:rgba(79,63,41,.09);
+  background:rgba(130,102,61,.035);
+}
+
+.tester-legal label{color:#746c61}
+.tester-legal a,.tester-footer a{color:#8a5c1b;border-bottom-color:rgba(138,92,27,.22)}
+.tester-legal a:hover,.tester-footer a:hover{color:#56370e;border-bottom-color:rgba(86,55,14,.42)}
+
+.tester-primary{
+  color:#fffaf0;
+  border-color:#23221d;
+  background:linear-gradient(180deg,#34332c,#1f1f1b);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 26px rgba(46,40,30,.16);
+}
+
+.tester-primary:hover{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 15px 30px rgba(46,40,30,.22);
+}
+
+.tester-alt-access{
+  border-top-color:rgba(79,63,41,.09);
+  color:#887f73;
+}
+
+.tester-activation-entry{color:#80581e}
+.tester-code-note{color:#746c61}
+.tester-link-button{color:#76562d;text-decoration-color:rgba(118,86,45,.25)}
+.tester-link-button:hover{color:#342717}
+
+.tester-account-head{
+  border-top-color:rgba(79,63,41,.10);
+  border-bottom-color:rgba(79,63,41,.10);
+}
+
+.tester-account-head strong{color:#29251f}
+
+.tester-request-card{
+  border-color:rgba(139,96,32,.15);
+  background:linear-gradient(145deg,rgba(182,130,50,.055),rgba(255,255,255,.30));
+  color:#746c61;
+}
+
+.tester-request-card strong{color:#342b20}
+.tester-request-card .tester-state{border-color:rgba(139,96,32,.22);color:#82591e}
+
+.tester-enrollment{
+  background:rgba(255,255,255,.58);
+  border-color:rgba(139,96,32,.18);
+}
+
+.tester-enrollment code{color:#805719}
+.tester-footer{border-top-color:rgba(79,63,41,.09);color:#857c70}
+
+@media (max-height:760px) and (min-width:761px){
+  .hero{
+    transform:none;
+    padding-top:74px;
+    padding-bottom:62px;
+  }
+
+  .hero::before{top:76px}
+  .logo-stage{width:190px;margin-top:20px}
+  .brand-lockup{width:340px}
+  .copy-block{margin-top:20px}
+  h1{font-size:52px}
+  .subtitle{margin-top:12px}
+  .ornament{margin-top:19px;margin-bottom:17px}
+  .horizon-wrap{bottom:42px}
+  .domain{bottom:18px}
+}
+
+@media (max-width:760px){
+  .site-shell{
+    background-image:
+      linear-gradient(180deg,rgba(255,253,248,.48) 0%,rgba(255,253,248,.12) 52%,rgba(255,253,248,.30) 100%),
+      url("carnori-light-master-background.png");
+    background-position:center,58% center;
+    background-size:cover,auto 112%;
+  }
+
+  .scene{
+    background:transparent;
+  }
+
+  .scene::before{
+    right:-56vw;
+    top:20%;
+    width:126vw;
+    opacity:.52;
+  }
+
+  .scene::after{display:none}
+  .particles{opacity:.13}
+
+  .hero{
+    width:100%;
+    margin-left:0;
+    align-items:center;
+    justify-content:center;
+    padding:
+      max(78px,env(safe-area-inset-top))
+      20px
+      max(64px,env(safe-area-inset-bottom));
+    text-align:center;
+  }
+
+  .hero::before{
+    top:84px;
+    left:50%;
+    width:100%;
+    transform:translateX(-50%);
+    font-size:8px;
+    letter-spacing:.24em;
+  }
+
+  .logo-stage{
+    width:min(54vw,230px);
+    margin:12px 0 -3px;
+  }
+
+  .brand-lockup{
+    width:min(77vw,355px);
+    height:clamp(42px,12vw,56px);
+    margin:0;
+  }
+
+  .brand-wordmark-text{
+    font-size:clamp(30px,9.6vw,42px);
+    letter-spacing:.15em;
+    padding-left:.15em;
+  }
+
+  .brand-rule{
+    width:min(56vw,270px);
+    margin:2.3svh auto 0;
+  }
+
+  .copy-block{margin-top:2.9svh}
+
+  h1{
+    font-size:clamp(43px,12.3vw,59px);
+    letter-spacing:-.045em;
+  }
+
+  .subtitle{
+    width:min(88vw,460px);
+    margin:1.8svh auto 0;
+    color:#5c564e;
+    font-size:clamp(13px,3.7vw,16px);
+    line-height:1.48;
+    letter-spacing:.055em;
+  }
+
+  .ornament{
+    width:min(48vw,205px);
+    margin:2.8svh auto 2.4svh;
+  }
+
+  .tagline{
+    font-size:clamp(14px,4.2vw,18px);
+    letter-spacing:.20em;
+  }
+
+  .horizon-wrap{
+    left:20px;
+    right:20px;
+    bottom:9svh;
+    width:auto;
+    height:30px;
+  }
+
+  .horizon-line{height:30px}
+  .horizon-line::after{top:15px;background:linear-gradient(90deg,transparent,rgba(141,97,31,.28),transparent)}
+
+  .domain{
+    left:50%;
+    right:auto;
+    bottom:max(3.1svh,env(safe-area-inset-bottom));
+    transform:translateX(-50%);
+    font-size:11px;
+    letter-spacing:.28em;
+  }
+
+  .electricians-link{
+    top:max(14px,env(safe-area-inset-top));
+    left:max(14px,env(safe-area-inset-left));
+    min-height:38px;
+    gap:8px;
+    padding:0 12px 0 6px;
+    font-size:10px;
+    letter-spacing:.07em;
+  }
+
+  .electricians-link-index{width:26px;height:26px;font-size:8px}
+  .electricians-link-arrow{display:none}
+}
+
+@media (max-width:390px){
+  .electricians-link span:nth-child(2){display:none}
+  .electricians-link{padding-right:6px}
+  .hero::before{font-size:7px;letter-spacing:.18em}
+  .logo-stage{width:min(52vw,205px)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .electricians-link{opacity:1!important;transform:none!important}
+}

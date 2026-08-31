@@ -4,6 +4,11 @@
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d', { alpha: true });
 
+  const electriciansLink = document.querySelector('.electricians-link');
+  if (electriciansLink && /^(localhost|127\.0\.0\.1|::1)$/.test(window.location.hostname)) {
+    electriciansLink.href = electriciansLink.dataset.localHref || electriciansLink.href;
+  }
+
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobileMq = window.matchMedia('(max-width: 760px)');
 

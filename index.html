@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#e8ebe7">
+  <meta name="theme-color" content="#f5efe4">
   <title>CARNORI | Скоро запуск</title>
   <meta name="description" content="CARNORI — новый взгляд на обслуживание автомобиля — скоро запуск">
   <link rel="canonical" href="https://carnori.ru/">
@@ -12,18 +12,26 @@
   <meta property="og:title" content="CARNORI | Скоро запуск">
   <meta property="og:description" content="Новый взгляд на обслуживание автомобиля">
   <meta property="og:url" content="https://carnori.ru/">
-  <meta property="og:image" content="https://carnori.ru/hero-approved.png">
+  <meta property="og:image" content="https://carnori.ru/carnori-social-preview-light-1200x630.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CARNORI | Скоро запуск">
+  <meta name="twitter:description" content="Новый взгляд на обслуживание автомобиля">
+  <meta name="twitter:image" content="https://carnori.ru/carnori-social-preview-light-1200x630.png">
 
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="carnori-cn-mark-approved.png" type="image/png">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="home-light.css">
+  <link rel="stylesheet" href="light-theme.css">
 </head>
 <body>
   <main class="site-shell" aria-label="CARNORI">
+    <a class="electricians-link" href="/electricians/" data-local-href="http://127.0.0.1:3000/" aria-label="Перейти на сайт электриков">
+      <span class="electricians-link-index" aria-hidden="true">01</span>
+      <span>Электрики</span>
+      <span class="electricians-link-arrow" aria-hidden="true">↗</span>
+    </a>
+
     <canvas id="particles" class="particles" aria-hidden="true"></canvas>
 
     <div class="scene" aria-hidden="true">
@@ -55,10 +63,10 @@
         <div class="logo-aura" aria-hidden="true"></div>
         <img
           class="monogram-image"
-          src="cn-logo-gold-transparent.webp"
+          src="carnori-cn-mark-approved.png"
           alt=""
-          width="700"
-          height="539"
+          width="1024"
+          height="1024"
           decoding="sync"
           fetchpriority="high"
           aria-hidden="true"
@@ -66,7 +74,7 @@
       </div>
 
       <div class="brand-lockup intro intro-2" aria-label="CARNORI">
-        <img class="brand-wordmark" src="carnori-wordmark.png" alt="CARNORI" width="980" height="126" decoding="sync">
+        <span class="brand-wordmark-text" aria-hidden="true">CARNORI</span>
       </div>
       <div class="brand-rule intro intro-3" aria-hidden="true">
         <span></span><b></b><span></span>
@@ -90,12 +98,6 @@
 
       <a class="domain intro intro-9" href="https://carnori.ru/">carnori.ru</a>
     </section>
-
-    <a class="electricians-entry" href="/electricians/">
-      <span class="electricians-entry-icon" aria-hidden="true">ϟ</span>
-      <span>Электрики</span>
-      <span class="electricians-entry-arrow" aria-hidden="true">↗</span>
-    </a>
 
     <button class="tester-entry" id="tester-entry" type="button" aria-haspopup="dialog" aria-controls="tester-portal">
       <span class="tester-entry-dot" aria-hidden="true"></span>
